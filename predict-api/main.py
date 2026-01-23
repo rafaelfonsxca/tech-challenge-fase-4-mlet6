@@ -1,5 +1,5 @@
 def main():
-    print("Hello from api-predict!")
+    print("Hello from predict-api!")
 
 
 if __name__ == "__main__":
