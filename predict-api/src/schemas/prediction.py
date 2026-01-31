@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 
-class PredictRequest(BaseModel):
-    symbol: str
+class PredictionInput(BaseModel):
+    data: list[float]
