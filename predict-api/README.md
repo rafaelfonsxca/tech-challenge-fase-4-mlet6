@@ -17,20 +17,57 @@ Este projeto utiliza `uv` para gerenciamento de dependências.
 uv sync
 ```
 
-## 🏃 Executando a API
+### 2. Instale as dependências
 
+#### 2.1. Instalar UV
 ```bash
-uvicorn main:app --reload
+pip install uv
+```
+Outros formas de instalação: [Documentação UV](https://docs.astral.sh/uv/getting-started/installation/).
+
+#### 2.2. Instalação das dependências utilizando comandos UV
+Linux
+```bash
+uv venv
+source .venv/bin/activate
+uv pip sync pyproject.toml
+```
+Windows
+```bash
+uv venv
+.\venv\Scripts\activate
+uv pip sync pyproject.toml
 ```
 
-A API estará disponível em `http://localhost:8000`
+### 3. Configure as variáveis de ambiente
 
-## 📚 Documentação
+Crie um arquivo `.env` na raiz do projeto:
 
-Após iniciar a API, acesse:
+```
+DATABASE_URL=sqlite:///./nome-banco.db
+SECRET_KEY=sua-chave-secreta
+```
 
-- **Swagger UI**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
+### 4. Execute as migrações do banco de dados
+
+```bash
+alembic upgrade head
+```
+
+### 5. Inicie a API
+
+```bash
+uv run uvicorn main:app --reload
+```
+
+A API estará disponível em [http://localhost:8000](http://localhost:8000).
+
+## Documentação da API
+
+Documentação disponível em:
+
+- [Swagger UI](http://localhost:8000/docs)
+- [ReDoc](http://localhost:8000/redoc)
 
 ## 📁 Estrutura
 

@@ -1,6 +1,14 @@
-def main():
-    print("Hello from predict-api!")
+from fastapi import FastAPI
+from src.api import auth
 
 
-if __name__ == "__main__":
-    main()
+app = FastAPI(
+    title="Título API",
+    description="API descrição aqui.",
+    version="1.0.0"
+)
+
+app.include_router(
+    auth.router, 
+    prefix="/api/v1",
+    tags=["Auth"])
