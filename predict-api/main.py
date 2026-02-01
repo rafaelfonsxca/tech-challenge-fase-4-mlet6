@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.api import auth, predict
+from src.api import auth, predict, user
 
 
 app = FastAPI(
@@ -12,6 +12,11 @@ app.include_router(
     auth.router, 
     prefix="/api/v1",
     tags=["Auth"])
+
+app.include_router(
+    user.router, 
+    prefix="/api/v1",
+    tags=["Users"])
 
 app.include_router(
     predict.router,

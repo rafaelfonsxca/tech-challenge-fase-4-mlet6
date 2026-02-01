@@ -4,57 +4,39 @@ API FastAPI para realizar predições de preços de ações utilizando modelos L
 
 ## 🚀 Instalação
 
-Este projeto utiliza `uv` para gerenciamento de dependências.
+Este projeto utiliza `uv` para gerenciamento de dependências e ambientes virtuais.
 
 ### Pré-requisitos
 
-- Python 3.14+
+- Python 3.12+
 - [uv](https://github.com/astral-sh/uv) instalado
 
-### Instalar Dependências
+### 1. Instalar Dependências
+
+Sincronize as dependências e crie o ambiente virtual automaticamente:
 
 ```bash
 uv sync
 ```
 
-### 2. Instale as dependências
+Isso instala todas as dependências listadas em `pyproject.toml` e configura o ambiente virtual.
 
-#### 2.1. Instalar UV
-```bash
-pip install uv
-```
-Outros formas de instalação: [Documentação UV](https://docs.astral.sh/uv/getting-started/installation/).
+### 2. Configure as variáveis de ambiente
 
-#### 2.2. Instalação das dependências utilizando comandos UV
-Linux
-```bash
-uv venv
-source .venv/bin/activate
-uv pip sync pyproject.toml
-```
-Windows
-```bash
-uv venv
-.\venv\Scripts\activate
-uv pip sync pyproject.toml
-```
-
-### 3. Configure as variáveis de ambiente
-
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env` na raiz do projeto (exemplo):
 
 ```
-DATABASE_URL=sqlite:///./nome-banco.db
-SECRET_KEY=sua-chave-secreta
+DATABASE_URL=sqlite:///./predict_stocks.db
+SECRET_KEY=sua-chave-secreta-aqui
 ```
 
-### 4. Execute as migrações do banco de dados
+### 3. Execute as migrações do banco de dados
 
 ```bash
-alembic upgrade head
+uv run alembic upgrade head
 ```
 
-### 5. Inicie a API
+### 4. Inicie a API
 
 ```bash
 uv run uvicorn main:app --reload
@@ -73,20 +55,22 @@ Documentação disponível em:
 
 ```
 predict-api/
-├── api/              # Endpoints da API
-│   └── ml.py        # Endpoints de machine learning
-├── schemas/          # Schemas Pydantic para validação
-│   └── prediction.py
-├── main.py          # Aplicação principal FastAPI
-└── pyproject.toml   # Configuração do projeto
+├── src/
+│   ├── api/
+│   │   └── predict.py    # Endpoints de predição
+│   ├── core/             # Configurações core (DB, auth, etc.)
+│   ├── crud/             # Operações CRUD
+│   ├── models/           # Modelos SQLAlchemy
+│   └── schemas/          # Schemas Pydantic
+│       └── prediction.py
+├── main.py               # Aplicação principal FastAPI
+├── pyproject.toml        # Configuração do projeto e dependências
+├── alembic.ini           # Configuração do Alembic para migrações
+└── migrations/           # Migrações do banco de dados
 ```
-
-## 🔧 Dependências
-
-- FastAPI >= 0.128.0
-- Uvicorn >= 0.40.0
 
 ## 📝 Notas
 
-Certifique-se de que os modelos treinados estão disponíveis na pasta `model/models/` antes de fazer predições.
+- Certifique-se de que os modelos treinados estão disponíveis na pasta `../model/models/` (relativo à API) antes de fazer predições.
+- O modelo espera 30 dias de dados com 5 features cada (Open, High, Low, Close, Volume).
 

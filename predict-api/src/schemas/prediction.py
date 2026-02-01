@@ -1,4 +1,5 @@
 from pydantic import BaseModel
 
 class PredictionInput(BaseModel):
-    data: list[float]
+    # Add ticker symbol
+    data: list[list[float]]

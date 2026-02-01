@@ -1,3 +1,4 @@
+import os
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -43,7 +44,7 @@ def get_data(symbol, window_size=30):
     X_train, X_test = X[:split], X[split:]
     y_train, y_test = y[:split], y[split:]
     
-    return X_train, X_test, y_train, y_test, scaler_target
+    return X_train, X_test, y_train, y_test, scaler_features, scaler_target
 
 def train_lstm(X_train, y_train, X_test, y_test):
     model = Sequential([
@@ -76,10 +77,20 @@ def train_lstm(X_train, y_train, X_test, y_test):
 
 symbol='DIS'
 model_name='lstm_v1'
-X_train, X_test, y_train, y_test, scaler = get_data(symbol)
+X_train, X_test, y_train, y_test, scaler_features, scaler = get_data(symbol)
 model, history = train_lstm(X_train, y_train, X_test, y_test)
-model.save(f'model\models\{model_name}.keras')
-joblib.dump(scaler, f'model\models\scaler_{model_name}.pkl')
+
+# Linux/Mac
+os.makedirs('models', exist_ok=True)
+model.save(os.path.join('models', f'{model_name}.keras'))
+joblib.dump(scaler_features, os.path.join('models', f'scaler_features_{model_name}.pkl'))
+joblib.dump(scaler, os.path.join('models', f'scaler_{model_name}.pkl'))
+
+
+# Windows
+#model.save(f'model\models\{model_name}.keras')
+#joblib.dump(scaler, f'model\models\scaler_{model_name}.pkl')
+
 y_real, y_pred = evaluate_model(model, X_test, y_test, scaler)
 plot_learning_curves(history, model_name)
 plot_predictions(y_real, y_pred, model_name)
