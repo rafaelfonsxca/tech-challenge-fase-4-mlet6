@@ -5,6 +5,7 @@ from tensorflow.keras.models import load_model
 from src.schemas.prediction import PredictionInput
 from src.schemas.user import UserResponse
 from src.core.security import get_current_user
+from src.core.monitoring import track_model_performance
 
 router = APIRouter()
 
@@ -14,6 +15,7 @@ scaler_features = joblib.load('../model/models/scaler_features_lstm_v1.pkl')
 scaler = joblib.load('../model/models/scaler_lstm_v1.pkl')
 
 @router.post("/predict")
+@track_model_performance
 def predict_stock_price(
     input: PredictionInput,
     current_user: UserResponse = Depends(get_current_user)):
